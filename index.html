@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f9fd">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SwingPilot">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>SwingPilot Personal</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,sans-serif;background:#f5f8fc;color:#122033;padding-bottom:90px}
+.app{max-width:900px;margin:auto;padding:12px}.head{display:flex;justify-content:space-between;align-items:center;padding:10px 2px}
+h1{font-size:21px;margin:0}.sub,.micro{font-size:11px;color:#718096;line-height:1.5}.pill{padding:7px 10px;border-radius:99px;background:#e8f7f0;color:#087a55;font-size:10px;font-weight:900}
+.page{display:none}.page.on{display:block}.card{background:#fff;border:1px solid #e2e9f2;border-radius:17px;padding:14px;margin-bottom:11px;box-shadow:0 6px 24px #20375a0b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lab{font-size:9px;color:#718096;font-weight:900;text-transform:uppercase}.val{font-size:20px;font-weight:950;margin-top:5px}.blue{color:#2857d9}.good{color:#087a55}
+button,.btn{width:100%;border:1px solid #c7d5f7;background:#edf3ff;color:#2148b2;padding:12px;border-radius:12px;font-weight:900;margin-top:8px;font-size:13px}
+input{width:100%;padding:11px;border:1px solid #dce4ee;border-radius:11px;margin-top:6px;background:#fff;font-size:16px}
+input[type=file]{display:none}.filebtn{display:block;text-align:center;border:1px solid #c7d5f7;background:#edf3ff;color:#2148b2;padding:12px;border-radius:12px;font-weight:900;margin-top:8px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,900px);display:grid;grid-template-columns:repeat(4,1fr);background:#fffffff4;backdrop-filter:blur(18px);border-top:1px solid #e2e9f2;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+.nav{border:0;background:transparent;color:#718096;font-size:9px;font-weight:800;padding:7px 2px;margin:0}.nav b{display:block;font-size:18px}.nav.active{background:#edf3ff;color:#2148b2}
+.notice{border-left:4px solid #2857d9;background:#f7f9ff;padding:10px;border-radius:10px;font-size:11px;line-height:1.5}
+.row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #eef2f6;font-size:12px}
+@media(max-width:520px){.grid{grid-template-columns:1fr 1fr}.val{font-size:17px}}
+</style>
+</head>
+<body><div class="app">
+<div class="head"><div><h1>SwingPilot Personal</h1><div class="sub">Private-data-safe · local-first PWA</div></div><div class="pill">LOCAL DATA</div></div>
+
+<section id="home" class="page on">
+<div class="card"><div class="lab">Privacy architecture</div><div class="val blue">App public · data local</div>
+<div class="micro">This hosted shell contains no trading history, holdings, account identifiers, P&amp;L, capital amount, broker reports, or imported files. Your data is created/imported only in this browser's local IndexedDB.</div></div>
+<div class="grid">
+<div class="card"><div class="lab">Local executions</div><div id="execCount" class="val">0</div></div>
+<div class="card"><div class="lab">Imported files</div><div id="importCount" class="val">0</div></div>
+</div>
+<div class="card"><div class="notice"><b>Important:</b> clearing Safari website data or deleting the app can remove local data. Use Backup after important imports.</div></div>
+</section>
+
+<section id="import" class="page">
+<div class="card"><div class="lab">Local import</div><div class="val blue">Choose broker files</div>
+<div class="micro">Selected files are processed locally by JavaScript. This build has no upload endpoint and makes no network request with file contents.</div>
+<label class="filebtn" for="files">Select CSV / XLSX / PDF</label><input id="files" type="file" multiple accept=".csv,.xlsx,.xls,.pdf">
+<div id="importMsg" class="micro" style="margin-top:10px">No files selected.</div></div>
+<div class="card"><div class="lab">Import log</div><div id="importLog" class="micro">Nothing imported yet.</div></div>
+</section>
+
+<section id="settings" class="page">
+<div class="card"><div class="lab">Local settings</div><div class="micro">Values below stay on this device and are not stored in the public repository.</div>
+<label class="micro">Validation capital baseline (₹)</label><input id="baseline" type="number" inputmode="decimal" placeholder="Enter locally">
+<label class="micro">Daily loss limit (₹)</label><input id="dailyStop" type="number" inputmode="decimal" placeholder="Enter locally">
+<button onclick="saveSettings()">Save locally</button><div id="setMsg" class="micro"></div></div>
+</section>
+
+<section id="backup" class="page">
+<div class="card"><div class="lab">Local database backup</div><div class="val blue">Export JSON</div>
+<div class="micro">Creates a backup of this app's local database. Keep the backup private.</div><button onclick="backupDB()">Create backup</button></div>
+<div class="card"><div class="lab">Restore</div><label class="filebtn" for="restore">Choose SwingPilot backup</label><input id="restore" type="file" accept=".json"><div id="restoreMsg" class="micro"></div></div>
+</section>
+</div>
+
+<nav class="bottom">
+<button class="nav active" data-page="home"><b>⌂</b>Home</button>
+<button class="nav" data-page="import"><b>⇩</b>Import</button>
+<button class="nav" data-page="settings"><b>⚙</b>Settings</button>
+<button class="nav" data-page="backup"><b>▣</b>Backup</button>
+</nav>
+
+<script>
+const DBNAME='SwingPilotLocal', DBVER=1;
+function dbOpen(){return new Promise((ok,no)=>{const r=indexedDB.open(DBNAME,DBVER);r.onupgradeneeded=()=>{const d=r.result;['imports','executions','settings'].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s,{keyPath:'id'})})};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+async function put(store,obj){const d=await dbOpen();return new Promise((ok,no)=>{const t=d.transaction(store,'readwrite');t.objectStore(store).put(obj);t.oncomplete=()=>ok();t.onerror=()=>no(t.error)})}
+async function all(store){const d=await dbOpen();return new Promise((ok,no)=>{const r=d.transaction(store).objectStore(store).getAll();r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+async function refresh(){document.getElementById('execCount').textContent=(await all('executions')).length;document.getElementById('importCount').textContent=(await all('imports')).length;const s=(await all('settings')).find(x=>x.id==='main');if(s){baseline.value=s.baseline||'';dailyStop.value=s.dailyStop||''}renderImports()}
+async function saveSettings(){await put('settings',{id:'main',baseline:baseline.value,dailyStop:dailyStop.value,updated:new Date().toISOString()});setMsg.textContent='Saved only on this device.'}
+function csvRows(txt){const lines=txt.replace(/\r/g,'').split('\n').filter(Boolean);if(!lines.length)return[];const parse=s=>{let a=[],q='',ins=false;for(let i=0;i<s.length;i++){let c=s[i];if(c=='"'){if(ins&&s[i+1]=='"'){q+='"';i++}else ins=!ins}else if(c==','&&!ins){a.push(q);q=''}else q+=c}a.push(q);return a};const h=parse(lines[0]);return lines.slice(1).map(x=>{let v=parse(x),o={};h.forEach((k,i)=>o[k.trim()]=v[i]);return o})}
+function tradeKey(r){return [r.trade_id,r.order_id,r.order_execution_time,r.symbol,r.quantity,r.price].join('|')}
+files.onchange=async()=>{let summary=[];for(const f of files.files){const id=[f.name,f.size,f.lastModified].join('|');let info={id,name:f.name,size:f.size,type:f.type||'',imported:new Date().toISOString(),kind:'registered'};if(f.name.toLowerCase().endsWith('.csv')){try{const rows=csvRows(await f.text());const cols=rows[0]?Object.keys(rows[0]):[];if(cols.includes('trade_id')&&cols.includes('symbol')){let n=0;for(const r of rows){await put('executions',{id:tradeKey(r),...r});n++}info.kind='tradebook-csv';info.rows=n;summary.push(f.name+': '+n+' execution rows processed locally')}else summary.push(f.name+': CSV registered locally')}catch(e){summary.push(f.name+': could not parse CSV')}}else summary.push(f.name+': registered locally (content not uploaded)');await put('imports',info)}importMsg.textContent=summary.join(' · ');await refresh()}
+async function renderImports(){const a=(await all('imports')).sort((x,y)=>String(y.imported).localeCompare(String(x.imported))).slice(0,15);importLog.innerHTML=a.length?a.map(x=>'<div class="row"><span>'+escapeHTML(x.name)+'</span><b>'+escapeHTML(x.kind)+'</b></div>').join(''):'Nothing imported yet.'}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function backupDB(){const payload={format:'SwingPilotLocalBackup',version:1,created:new Date().toISOString(),imports:await all('imports'),executions:await all('executions'),settings:await all('settings')};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SwingPilot_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+restore.onchange=async()=>{try{const p=JSON.parse(await restore.files[0].text());if(p.format!=='SwingPilotLocalBackup')throw Error();for(const s of ['imports','executions','settings'])for(const x of (p[s]||[]))await put(s,x);restoreMsg.textContent='Backup restored locally.';await refresh()}catch(e){restoreMsg.textContent='Not a valid SwingPilot backup.'}}
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(b.dataset.page).classList.add('on')});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+refresh();
+</script></body></html>
