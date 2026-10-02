@@ -19,15 +19,17 @@ h1{font-size:21px;margin:0}.sub,.micro{font-size:11px;color:#718096;line-height:
 button,.btn{width:100%;border:1px solid #c7d5f7;background:#edf3ff;color:#2148b2;padding:12px;border-radius:12px;font-weight:900;margin-top:8px;font-size:13px}
 input{width:100%;padding:11px;border:1px solid #dce4ee;border-radius:11px;margin-top:6px;background:#fff;font-size:16px}
 input[type=file]{display:none}.filebtn{display:block;text-align:center;border:1px solid #c7d5f7;background:#edf3ff;color:#2148b2;padding:12px;border-radius:12px;font-weight:900;margin-top:8px}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,900px);display:grid;grid-template-columns:repeat(4,1fr);background:#fffffff4;backdrop-filter:blur(18px);border-top:1px solid #e2e9f2;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,900px);display:grid;grid-template-columns:repeat(5,1fr);background:#fffffff4;backdrop-filter:blur(18px);border-top:1px solid #e2e9f2;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
 .nav{border:0;background:transparent;color:#718096;font-size:9px;font-weight:800;padding:7px 2px;margin:0}.nav b{display:block;font-size:18px}.nav.active{background:#edf3ff;color:#2148b2}
 .notice{border-left:4px solid #2857d9;background:#f7f9ff;padding:10px;border-radius:10px;font-size:11px;line-height:1.5}
 .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #eef2f6;font-size:12px}
 @media(max-width:520px){.grid{grid-template-columns:1fr 1fr}.val{font-size:17px}}
+
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{background:#fff;border:1px solid #dfe7f2;border-radius:16px;padding:14px}.kpi .v{font-size:22px;font-weight:900;margin-top:5px}.tablewrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:12px}.tbl th,.tbl td{padding:9px;border-bottom:1px solid #edf1f6;text-align:right;white-space:nowrap}.tbl th:first-child,.tbl td:first-child{text-align:left}.good{color:#087a55}.bad{color:#c93c4a}.warn{color:#a76500}.barrow{display:grid;grid-template-columns:58px 1fr 78px;gap:8px;align-items:center;margin:8px 0;font-size:11px}.bartrack{height:9px;background:#edf2f8;border-radius:99px;overflow:hidden}.barfill{height:100%;background:#315ee8;border-radius:99px}.sectiontitle{font-weight:900;font-size:16px;margin-bottom:4px}
 </style>
 </head>
 <body><div class="app">
-<div class="head"><div><h1>SwingPilot Personal</h1><div class="sub">Private-data-safe · local-first PWA</div></div><div class="pill">LOCAL DATA</div></div>
+<div class="head"><div><h1>SwingPilot Personal</h1><div class="sub">Private-data-safe · local-first PWA · Analytics V2</div></div><div class="pill">LOCAL DATA</div></div>
 
 <section id="home" class="page on">
 <div class="card"><div class="lab">Privacy architecture</div><div class="val blue">App public · data local</div>
@@ -39,6 +41,20 @@ input[type=file]{display:none}.filebtn{display:block;text-align:center;border:1p
 <div class="card"><div class="notice"><b>Important:</b> clearing Safari website data or deleting the app can remove local data. Use Backup after important imports.</div></div>
 </section>
 
+<section id="dashboard" class="page">
+<div class="card"><div class="lab">LOCAL ANALYTICS</div><div class="val blue">Historical Execution Dashboard</div><div class="micro">Calculated only from tradebook rows stored on this device. Turnover is not capital deployed. P&amp;L is intentionally not invented from executions alone.</div></div>
+<div class="kpis">
+<div class="kpi"><div class="lab">Executions</div><div class="v" id="dExec">0</div></div>
+<div class="kpi"><div class="lab">Symbols</div><div class="v" id="dSymbols">0</div></div>
+<div class="kpi"><div class="lab">Buy turnover</div><div class="v" id="dBuy">₹0</div></div>
+<div class="kpi"><div class="lab">Sell turnover</div><div class="v" id="dSell">₹0</div></div>
+<div class="kpi"><div class="lab">Active days</div><div class="v" id="dDays">0</div></div>
+<div class="kpi"><div class="lab">Date range</div><div class="v" style="font-size:14px" id="dRange">—</div></div>
+</div>
+<div class="card"><div class="sectiontitle">Monthly activity</div><div class="micro">Execution activity reconstructed from your local tradebook.</div><div class="tablewrap"><table class="tbl"><thead><tr><th>Month</th><th>Exec</th><th>Symbols</th><th>Buy</th><th>Sell</th></tr></thead><tbody id="monthRows"></tbody></table></div></div>
+<div class="card"><div class="sectiontitle">Most-traded symbols</div><div class="micro">Ranked by total buy + sell turnover, not by quality or recommendation.</div><div id="symbolBars"></div></div>
+<div class="card"><div class="sectiontitle">Data quality</div><div id="dq" class="micro">Waiting for local data.</div></div>
+</section>
 <section id="import" class="page">
 <div class="card"><div class="lab">Local import</div><div class="val blue">Choose broker files</div>
 <div class="micro">Selected files are processed locally by JavaScript. This build has no upload endpoint and makes no network request with file contents.</div>
@@ -62,7 +78,7 @@ input[type=file]{display:none}.filebtn{display:block;text-align:center;border:1p
 </div>
 
 <nav class="bottom">
-<button class="nav active" data-page="home"><b>⌂</b>Home</button>
+<button class="nav active" data-page="home"><b>⌂</b>Home</button><button class="nav" onclick="go('dashboard',this)"><span>▦</span>Dashboard</button>
 <button class="nav" data-page="import"><b>⇩</b>Import</button>
 <button class="nav" data-page="settings"><b>⚙</b>Settings</button>
 <button class="nav" data-page="backup"><b>▣</b>Backup</button>
@@ -73,7 +89,12 @@ const DBNAME='SwingPilotLocal', DBVER=1;
 function dbOpen(){return new Promise((ok,no)=>{const r=indexedDB.open(DBNAME,DBVER);r.onupgradeneeded=()=>{const d=r.result;['imports','executions','settings'].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s,{keyPath:'id'})})};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 async function put(store,obj){const d=await dbOpen();return new Promise((ok,no)=>{const t=d.transaction(store,'readwrite');t.objectStore(store).put(obj);t.oncomplete=()=>ok();t.onerror=()=>no(t.error)})}
 async function all(store){const d=await dbOpen();return new Promise((ok,no)=>{const r=d.transaction(store).objectStore(store).getAll();r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
-async function refresh(){document.getElementById('execCount').textContent=(await all('executions')).length;document.getElementById('importCount').textContent=(await all('imports')).length;const s=(await all('settings')).find(x=>x.id==='main');if(s){baseline.value=s.baseline||'';dailyStop.value=s.dailyStop||''}renderImports()}
+
+function money(n){n=Number(n)||0;return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n)}
+function normDate(v){if(!v)return '';let x=String(v).trim();let m=x.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[0];m=x.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})/);return m?`${m[3]}-${m[2]}-${m[1]}`:x.slice(0,10)}
+async function renderDashboard(){let a=await all('executions');if(!a.length){dExec.textContent='0';dq.textContent='Import a Zerodha tradebook CSV to populate analytics.';return}let buy=0,sell=0,sy=new Set(),days=new Set(),dates=[],months={},turn={};for(const r of a){let q=Number(r.quantity)||0,p=Number(r.price)||0,v=q*p,t=String(r.trade_type||'').toLowerCase(),sym=String(r.symbol||'').trim(),d=normDate(r.trade_date||r.order_execution_time);if(t==='buy')buy+=v;if(t==='sell')sell+=v;if(sym)sy.add(sym);if(d){days.add(d);dates.push(d);let m=d.slice(0,7);months[m]??={e:0,s:new Set(),b:0,x:0};months[m].e++;if(sym)months[m].s.add(sym);if(t==='buy')months[m].b+=v;if(t==='sell')months[m].x+=v}turn[sym]=(turn[sym]||0)+v}dExec.textContent=a.length.toLocaleString('en-IN');dSymbols.textContent=sy.size;dBuy.textContent=money(buy);dSell.textContent=money(sell);dDays.textContent=days.size;dates.sort();dRange.textContent=dates.length?dates[0]+' → '+dates.at(-1):'—';monthRows.innerHTML=Object.entries(months).sort().map(([m,x])=>`<tr><td><b>${m}</b></td><td>${x.e}</td><td>${x.s.size}</td><td>${money(x.b)}</td><td>${money(x.x)}</td></tr>`).join('');let top=Object.entries(turn).filter(x=>x[0]).sort((a,b)=>b[1]-a[1]).slice(0,10),mx=top[0]?.[1]||1;symbolBars.innerHTML=top.map(([n,v])=>`<div class="barrow"><b>${n}</b><div class="bartrack"><div class="barfill" style="width:${v/mx*100}%"></div></div><span>${money(v)}</span></div>`).join('');dq.innerHTML=`<b>${a.length.toLocaleString('en-IN')}</b> execution rows · <b>${sy.size}</b> symbols · <b>${days.size}</b> active trading days.<br>P&amp;L/charges require authoritative P&amp;L, contract-note and ledger controls; this screen does not estimate them.`}
+
+async function refresh(){document.getElementById('execCount').textContent=(await all('executions')).length;document.getElementById('importCount').textContent=(await all('imports')).length;const s=(await all('settings')).find(x=>x.id==='main');if(s){baseline.value=s.baseline||'';dailyStop.value=s.dailyStop||''}renderImports();renderDashboard()}
 async function saveSettings(){await put('settings',{id:'main',baseline:baseline.value,dailyStop:dailyStop.value,updated:new Date().toISOString()});setMsg.textContent='Saved only on this device.'}
 function csvRows(txt){const lines=txt.replace(/\r/g,'').split('\n').filter(Boolean);if(!lines.length)return[];const parse=s=>{let a=[],q='',ins=false;for(let i=0;i<s.length;i++){let c=s[i];if(c=='"'){if(ins&&s[i+1]=='"'){q+='"';i++}else ins=!ins}else if(c==','&&!ins){a.push(q);q=''}else q+=c}a.push(q);return a};const h=parse(lines[0]);return lines.slice(1).map(x=>{let v=parse(x),o={};h.forEach((k,i)=>o[k.trim()]=v[i]);return o})}
 function tradeKey(r){return [r.trade_id,r.order_id,r.order_execution_time,r.symbol,r.quantity,r.price].join('|')}
