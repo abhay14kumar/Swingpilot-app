@@ -104,6 +104,6 @@ function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;',
 async function backupDB(){const payload={format:'SwingPilotLocalBackup',version:1,created:new Date().toISOString(),imports:await all('imports'),executions:await all('executions'),settings:await all('settings')};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SwingPilot_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 restore.onchange=async()=>{try{const p=JSON.parse(await restore.files[0].text());if(p.format!=='SwingPilotLocalBackup')throw Error();for(const s of ['imports','executions','settings'])for(const x of (p[s]||[]))await put(s,x);restoreMsg.textContent='Backup restored locally.';await refresh()}catch(e){restoreMsg.textContent='Not a valid SwingPilot backup.'}}
 document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(b.dataset.page).classList.add('on')});
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=5').then(r=>r.update()));
 refresh();
 </script></body></html>
