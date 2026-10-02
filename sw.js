@@ -1,4 +1,4 @@
-const CACHE='swingpilot-stable-r3-1-20261002';
+const CACHE='swingpilot-stable-r3-2-final-20261002';
 const CORE=['./','./index.html'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>Promise.all(CORE.map(u=>c.add(u).catch(()=>null)))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

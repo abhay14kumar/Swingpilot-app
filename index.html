@@ -38,8 +38,33 @@
 /* Stable R3: mobile-first accounting cockpit */
 .r3heroStrip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.r3tile{padding:13px;border-radius:15px;background:#f5f8fc;border:1px solid #e1e9f3}.r3tile .k{font-size:9px;color:#70819a;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.r3tile .v{font-size:19px;font-weight:950;margin-top:4px}.r3sub{font-size:10px;color:#718096;margin-top:3px}.r3chart{height:220px;margin-top:8px;position:relative;overflow:hidden}.r3chart canvas{display:block;width:100%!important;height:100%!important;max-width:100%}.r3sectionnav{display:flex;gap:7px;overflow:auto;scrollbar-width:none}.r3sectionnav::-webkit-scrollbar{display:none}.dayCard details{margin-top:8px}.dayCard summary{cursor:pointer;color:#245fe0;font-size:11px;font-weight:900;list-style:none}.dayCard summary::-webkit-details-marker{display:none}.monthCard{position:relative;overflow:hidden}.monthCard .monthAccent{position:absolute;left:0;top:0;bottom:0;width:4px;background:#07875e}.monthCard.loss .monthAccent{background:#d33f50}.r3cum{font-size:10px;color:#70819a;margin-top:4px}.r3Action{display:inline-flex;align-items:center;justify-content:center;width:auto!important;padding:8px 11px!important;margin:8px 0 0!important;font-size:10px!important}.verifiedNote{background:#effaf6;color:#126b50;border-left:4px solid #07875e;padding:10px 12px;border-radius:11px;font-size:11px;line-height:1.45}.calcNote{background:#fff8e8;color:#775400;border-left:4px solid #d48b00;padding:10px 12px;border-radius:11px;font-size:11px;line-height:1.45}.r3costbar{display:grid;grid-template-columns:110px 1fr 82px;gap:8px;align-items:center;margin:10px 0;font-size:10px}.r3costtrack{height:10px;border-radius:99px;background:#edf2f8;overflow:hidden}.r3costfill{height:100%;border-radius:99px;background:linear-gradient(90deg,#245fe0,#0d91a5)}
 @media(max-width:600px){.perfHero{margin-top:2px}.perfHero .val{font-size:27px}.r2tabs{position:sticky;top:0;z-index:5;background:#f6f9ff;padding:8px 0}.filterGrid{gap:7px}.filterGrid input,.filterGrid select{font-size:13px;padding:9px}.r3heroStrip{grid-template-columns:1fr 1fr}.r3tile{padding:11px}.r3tile .v{font-size:17px}.dayCard,.monthCard,.stockCard{padding:13px}.miniGrid{gap:6px}.miniGrid div{padding:8px}.stockCard .netBig{font-size:17px}}
-</style></head><body><div class="app"><div class="head"><div><div class="title">SwingPilot Personal</div><div class="sub">Trading Intelligence</div></div><div class="pill">SWINGPILOT</div></div>
-<section id="home" class="page on"><div class="card hero"><div class="lab">SWINGPILOT COMMAND CENTER</div><div class="val">Trading Command Center</div><div class="micro">P&L, costs, portfolio, market intelligence and ₹8L strategy validation.</div></div><div class="grid2"><div class="kpi"><div class="lab">Executions</div><div id="hExec" class="val">0</div></div><div class="kpi"><div class="lab">Imported files</div><div id="hFiles" class="val">0</div></div><div class="kpi"><div class="lab">Historical range</div><div id="hRange" class="val" style="font-size:13px">—</div></div><div class="kpi"><div class="lab">Validation baseline</div><div id="hBase" class="val">₹0</div></div></div><div class="card"><div class="sectionhead"><div><div class="sectiontitle">Performance cockpit</div><div class="micro">Historical controls + validation remain separate.</div></div><span class="chip">STABLE R3.1</span></div><div class="metricband" style="margin-top:10px"><div class="perf"><div class="lab">Historical economic</div><div id="homeHistNet" class="v">Pending</div></div><div class="perf"><div class="lab">Validation net</div><div id="homeValNet" class="v">₹0</div></div><div class="perf"><div class="lab">MTF interest</div><div id="homeMtfCost" class="v">₹0</div></div><div class="perf"><div class="lab">Validation DD</div><div id="homeDD" class="v">₹0</div></div></div><div class="chartbox"><canvas id="homeChart"></canvas></div><div class="legend"><span><i class="dot blueDot"></i>Validation cumulative P&amp;L</span></div></div><div class="card"><div class="sectiontitle">Data readiness</div><div id="readiness"></div></div><div class="card"><div class="notice"><b>Privacy:</b> GitHub receives app code only. Never upload broker reports or SwingPilot backup JSON to the repository.</div></div></section>
+</style>
+<style id="stable-r32-polish">
+#dashboard .r2tabs{display:grid;grid-template-columns:repeat(5,minmax(96px,1fr));gap:8px;overflow-x:auto;padding:4px 2px 10px}
+#dashboard .r2tab{width:100%;min-height:44px;margin:0!important;padding:9px 12px!important;text-align:center}
+#dashboard .filterGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;align-items:end}
+#dashboard .filterGrid label{display:flex;flex-direction:column;min-width:0;gap:6px;margin:0}
+#dashboard .filterGrid input,#dashboard .filterGrid select{box-sizing:border-box;width:100%;height:46px;margin:0!important;padding:0 12px!important;border-radius:14px}
+.stockCard .r3Action{position:relative;z-index:2;cursor:pointer;touch-action:manipulation}
+.stockCard .stockLink{cursor:pointer}
+.spModal{position:fixed;inset:0;z-index:9999;background:rgba(7,23,46,.48);display:none;align-items:flex-end;justify-content:center}
+.spModal.on{display:flex}.spSheet{width:min(920px,100%);max-height:92vh;overflow:auto;background:#f4f8fd;border-radius:28px 28px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(10,30,60,.22)}
+.spSheetHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;position:sticky;top:-18px;background:#f4f8fd;padding:18px 0 12px;z-index:4}
+.spSheetHead h2{margin:0;font-size:26px}.spClose{width:42px!important;height:42px!important;border-radius:50%!important;padding:0!important;margin:0!important;font-size:20px!important}
+.spStockSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:8px 0 14px}.spMetric{background:#fff;border:1px solid #dbe5f2;border-radius:16px;padding:12px}.spMetric span{display:block;font-size:10px;color:#70819a;text-transform:uppercase;font-weight:900;letter-spacing:.05em}.spMetric b{display:block;font-size:18px;margin-top:4px}
+.spTradeCard{background:#fff;border:1px solid #dbe5f2;border-radius:17px;padding:12px;margin:9px 0}.spTradeTop{display:flex;justify-content:space-between;gap:8px}.spSide{font-weight:950}.spSide.buy{color:#087a55}.spSide.sell{color:#cf3f50}.spTradeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}.spTradeGrid div{background:#f6f9fd;border-radius:10px;padding:8px}.spTradeGrid span{display:block;font-size:9px;text-transform:uppercase;color:#70819a;font-weight:850}.spTradeGrid b{display:block;margin-top:3px;font-size:12px}
+.spMonthCost{background:#fff8e8;border-left:4px solid #d48b00;padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.45;margin:10px 0}
+@media(max-width:600px){
+ #dashboard .r2tabs{grid-template-columns:repeat(5,112px);margin-left:-2px;margin-right:-2px}
+ #dashboard .filterGrid{gap:10px}
+ #dashboard .filterGrid label{font-size:12px}
+ #dashboard .filterGrid input,#dashboard .filterGrid select{height:48px;font-size:14px!important;padding:0 10px!important}
+ .spSheet{max-height:94vh}.spSheetHead h2{font-size:23px}.spStockSummary{grid-template-columns:1fr 1fr}
+}
+</style>
+
+</head><body><div class="app"><div class="head"><div><div class="title">SwingPilot Personal</div><div class="sub">Trading Intelligence</div></div><div class="pill">SWINGPILOT</div></div>
+<section id="home" class="page on"><div class="card hero"><div class="lab">SWINGPILOT COMMAND CENTER</div><div class="val">Trading Command Center</div><div class="micro">P&L, costs, portfolio, market intelligence and ₹8L strategy validation.</div></div><div class="grid2"><div class="kpi"><div class="lab">Executions</div><div id="hExec" class="val">0</div></div><div class="kpi"><div class="lab">Imported files</div><div id="hFiles" class="val">0</div></div><div class="kpi"><div class="lab">Historical range</div><div id="hRange" class="val" style="font-size:13px">—</div></div><div class="kpi"><div class="lab">Validation baseline</div><div id="hBase" class="val">₹0</div></div></div><div class="card"><div class="sectionhead"><div><div class="sectiontitle">Performance cockpit</div><div class="micro">Historical controls + validation remain separate.</div></div><span class="chip">STABLE R3.2</span></div><div class="metricband" style="margin-top:10px"><div class="perf"><div class="lab">Historical economic</div><div id="homeHistNet" class="v">Pending</div></div><div class="perf"><div class="lab">Validation net</div><div id="homeValNet" class="v">₹0</div></div><div class="perf"><div class="lab">MTF interest</div><div id="homeMtfCost" class="v">₹0</div></div><div class="perf"><div class="lab">Validation DD</div><div id="homeDD" class="v">₹0</div></div></div><div class="chartbox"><canvas id="homeChart"></canvas></div><div class="legend"><span><i class="dot blueDot"></i>Validation cumulative P&amp;L</span></div></div><div class="card"><div class="sectiontitle">Data readiness</div><div id="readiness"></div></div><div class="card"><div class="notice"><b>Privacy:</b> GitHub receives app code only. Never upload broker reports or SwingPilot backup JSON to the repository.</div></div></section>
 <section id="dashboard" class="page">
 <div class="card perfHero"><div class="lab">PERFORMANCE CENTER</div><div class="val">Trading Performance</div><div class="micro">Daily, monthly, stock and cost intelligence from 17 Jun 2026 onward.</div></div>
 <div class="card">
@@ -372,8 +397,8 @@ async function renderR2(){
  let cumM=0;qs('r2MonthlyMobile').innerHTML=months.map(([m,z])=>{cumM+=z.net;return`<div class="monthCard ${z.net<0?'loss':''}"><i class="monthAccent"></i><div class="rowTop"><div><b>${m}</b><div class="micro">${z.days} active days · full-month verified</div><div class="r3cum">Cumulative ${r2m(cumM)}</div></div><div><span class="sourceTag">VERIFIED</span><div class="netBig ${r2pc(z.net)}">${r2m(z.net)}</div></div></div><div class="miniGrid"><div><span>Gross realized</span><b>${r2m(z.realized)}</b></div><div><span>Trading charges</span><b>${r2m(z.charges)}</b></div><div><span>Other debits incl. financing</span><b>${r2m(z.other)}</b></div><div><span>MTF interest component</span><b>${r2m(z.mtf)}</b></div></div></div>`}).join('');
 
  let ss=Object.entries(stocks).sort((a,b)=>b[1].turn-a[1].turn);
- qs('r2StockRows').innerHTML=ss.map(([s,z])=>{let gp=byStockGross[s]||0,sc=turn?calcCost*z.turn/turn:0,np=gp-sc;return`<tr><td><b>${s}</b></td><td>${z.e}</td><td>${r2m(z.b)}</td><td>${r2m(z.s)}</td><td>${r2m(z.turn)}</td><td class="${r2pc(gp)}">${r2m(gp)}</td><td class="${r2pc(np)}"><b>${r2m(np)}</b></td><td><a class="stockLink" href="#" onclick="openIntel('${s}');return false">Analyse →</a></td></tr>`}).join('');
- qs('r2StockMobile').innerHTML=ss.map(([s,z])=>{let gp=byStockGross[s]||0,sc=turn?calcCost*z.turn/turn:0,np=gp-sc;return`<div class="stockCard"><div class="rowTop"><div><b class="stockLink">${s}</b><div class="micro">${z.e} executions</div></div><div><span class="sourceTag calc">CALCULATED</span><div class="netBig ${r2pc(np)}">${r2m(np)}</div></div></div><div class="miniGrid"><div><span>Gross FIFO*</span><b>${r2m(gp)}</b></div><div><span>Allocated costs*</span><b>${r2m(sc)}</b></div><div><span>Turnover</span><b>${r2m(z.turn)}</b></div><div><span>Net qty</span><b>${z.bq-z.sq}</b></div></div><button class="r3Action" onclick="openIntel('${s}')">Analyse ${s} →</button></div>`}).join('');
+ qs('r2StockRows').innerHTML=ss.map(([s,z])=>{let gp=byStockGross[s]||0,sc=turn?calcCost*z.turn/turn:0,np=gp-sc;return`<tr><td><b>${s}</b></td><td>${z.e}</td><td>${r2m(z.b)}</td><td>${r2m(z.s)}</td><td>${r2m(z.turn)}</td><td class="${r2pc(gp)}">${r2m(gp)}</td><td class="${r2pc(np)}"><b>${r2m(np)}</b></td><td><a class="stockLink" href="#" onclick="openStockHistory('${s}');return false">Analyse →</a></td></tr>`}).join('');
+ qs('r2StockMobile').innerHTML=ss.map(([s,z])=>{let gp=byStockGross[s]||0,sc=turn?calcCost*z.turn/turn:0,np=gp-sc;return`<div class="stockCard"><div class="rowTop"><div><b class="stockLink">${s}</b><div class="micro">${z.e} executions</div></div><div><span class="sourceTag calc">CALCULATED</span><div class="netBig ${r2pc(np)}">${r2m(np)}</div></div></div><div class="miniGrid"><div><span>Gross FIFO*</span><b>${r2m(gp)}</b></div><div><span>Allocated costs*</span><b>${r2m(sc)}</b></div><div><span>Turnover</span><b>${r2m(z.turn)}</b></div><div><span>Net qty</span><b>${z.bq-z.sq}</b></div></div><button class="r3Action" onclick="openStockHistory('${s}')">History & analysis ${s} →</button></div>`}).join('');
 
  let dvals=ds.map(x=>x[1]),posDays=dvals.filter(z=>z.net>0).length,best=dvals.length?Math.max(...dvals.map(z=>z.net)):0,worst=dvals.length?Math.min(...dvals.map(z=>z.net)):0,avg=dvals.length?dvals.reduce((a,z)=>a+z.net,0)/dvals.length:0,win=dvals.length?posDays/dvals.length*100:0;
  if(qs('r3DailySummary'))qs('r3DailySummary').innerHTML=`<div class="r3tile"><div class="k">Calculated net*</div><div class="v ${r2pc(calcNet)}">${r2m(calcNet)}</div></div><div class="r3tile"><div class="k">Win days</div><div class="v">${posDays}/${dvals.length}</div><div class="r3sub">${win.toFixed(1)}%</div></div><div class="r3tile"><div class="k">Best day</div><div class="v ${r2pc(best)}">${r2m(best)}</div></div><div class="r3tile"><div class="k">Worst day</div><div class="v ${r2pc(worst)}">${r2m(worst)}</div></div><div class="r3tile"><div class="k">Average active day</div><div class="v ${r2pc(avg)}">${r2m(avg)}</div></div><div class="r3tile"><div class="k">Allocated costs*</div><div class="v">${r2m(calcCost)}</div></div>`;
@@ -391,4 +416,128 @@ document.addEventListener('click',e=>{let b=e.target.closest('.r2tab');if(!b)ret
 async function syncPortfolio(){qs('pfSyncMsg').textContent='Syncing…';try{let p=await bridge('/api/portfolio'),raw=p.holdings||[],allPos=p.positions?.net||[],tr=p.trades||[],margin=p.margins||{};let eff=x=>Number(x.quantity||0)+Number(x.t1_quantity||0)+Number(x.mtf?.quantity||0);let h=raw.filter(x=>eff(x)!==0),pos=allPos.filter(x=>Number(x.quantity||0)!==0),value=0,pnl=0,day=0;h.forEach(x=>{let q=eff(x),inv=(+x.average_price||0)*q,val=(+x.last_price||0)*q,pl=val-inv;value+=val;pnl+=pl;day+=((+x.last_price||0)-(+x.close_price||+x.last_price||0))*q});pos.forEach(x=>{pnl+=+x.pnl||0;day+=(+x.pnl||0)});qs('pfValue').textContent=r2m(value);qs('pfPnl').textContent=r2m(pnl);qs('pfPnl').className='v '+r2pc(pnl);qs('pfCash').textContent=r2m(margin.equity?.available?.live_balance??margin.equity?.net??0);qs('pfDayPnl').textContent=r2m(day);qs('holdingRows').innerHTML=h.length?h.map(x=>{let q=eff(x),inv=(+x.average_price||0)*q,val=(+x.last_price||0)*q,pl=val-inv,pp=inv?pl/inv*100:0;return`<tr class="clickrow" onclick="openIntel('${x.tradingsymbol}')"><td><b>${x.tradingsymbol}</b></td><td>${q}</td><td>${r2m(x.average_price)}</td><td>${r2m(x.last_price)}</td><td>${r2m(inv)}</td><td>${r2m(val)}</td><td class="${r2pc(pl)}">${r2m(pl)}</td><td class="${r2pc(pp)}">${pp.toFixed(2)}%</td></tr>`}).join(''):'<tr><td colspan="8">No active holdings.</td></tr>';qs('positionRows').innerHTML=pos.length?pos.map(x=>`<tr class="clickrow" onclick="openIntel('${x.tradingsymbol}')"><td><b>${x.tradingsymbol}</b></td><td>${x.product||''}</td><td>${x.quantity}</td><td>${r2m(x.average_price)}</td><td>${r2m(x.last_price)}</td><td class="${r2pc(x.pnl)}">${r2m(x.pnl)}</td><td>${x.day_buy_quantity||x.day_buy_qty||0}</td><td>${x.day_sell_quantity||x.day_sell_qty||0}</td></tr>`).join(''):'<tr><td colspan="8">No open positions.</td></tr>';qs('todayTradeRows').innerHTML=tr.length?tr.slice().reverse().map(x=>`<tr><td>${String(x.exchange_timestamp||'').split(' ')[1]||'—'}</td><td><b>${x.tradingsymbol}</b></td><td class="${x.transaction_type==='BUY'?'good':'bad'}">${x.transaction_type}</td><td>${x.product||''}</td><td>${x.quantity}</td><td>${r2m(x.average_price)}</td></tr>`).join(''):'<tr><td colspan="6">No trades today.</td></tr>';qs('pfSyncMsg').textContent='Synced '+new Date().toLocaleTimeString();setKiteBadge(true,'Zerodha session active · read-only')}catch(e){qs('pfSyncMsg').textContent=e.message}}
 setTimeout(renderR2,1000);
 </script>
+
+<div id="stockHistoryModal" class="spModal" aria-hidden="true">
+  <div class="spSheet" role="dialog" aria-modal="true" aria-labelledby="spStockTitle">
+    <div class="spSheetHead">
+      <div><div class="lab">COMPLETE STOCK HISTORY</div><h2 id="spStockTitle">Stock</h2><div id="spStockRange" class="micro"></div></div>
+      <button id="spStockClose" class="spClose" aria-label="Close">×</button>
+    </div>
+    <div id="spStockSummary" class="spStockSummary"></div>
+    <div class="spMonthCost"><b>Accounting note:</b> Trade values and FIFO realized P&amp;L come from imported executions. Stock-level charges are <b>allocated estimates</b> from verified monthly account costs using this stock's share of full-account monthly turnover. They are not represented as exact contract-note charges unless line-level broker charges are imported.</div>
+    <div class="card" style="margin:10px 0">
+      <div class="sectiontitle">Month-by-month stock result</div>
+      <div class="tablewrap"><table><thead><tr><th>Month</th><th>Buy</th><th>Sell</th><th>Gross FIFO</th><th>Allocated costs*</th><th>Calculated net*</th></tr></thead><tbody id="spStockMonths"></tbody></table></div>
+    </div>
+    <div class="card" style="margin:10px 0">
+      <div class="sectiontitle">Every execution</div>
+      <div class="micro">Chronological buy/sell history with quantity, execution price and trade value.</div>
+      <div id="spTradeCards"></div>
+      <div class="tablewrap desktopTable"><table><thead><tr><th>Date/time</th><th>Side</th><th>Qty</th><th>Price</th><th>Trade value</th><th>Order ID</th><th>Trade ID</th></tr></thead><tbody id="spTradeRows"></tbody></table></div>
+    </div>
+    <button id="spOpenChart">Open chart &amp; intelligence →</button>
+  </div>
+</div>
+
+
+<script id="stable-r32-stock-history">
+function spShowPage(id){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  const p=document.getElementById(id); if(p)p.classList.add('on');
+  document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===id));
+  if(id==='dashboard' && typeof refresh==='function') refresh();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.showPage=spShowPage;
+
+function spMoney(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(Number(v)||0)}
+function spD(r){return normDate(r.trade_date||r.order_execution_time)}
+function spSide(r){return String(r.trade_type||'').toLowerCase()}
+function spTime(r){return String(r.order_execution_time||r.trade_date||'').replace('T',' ').slice(0,19)}
+
+async function openStockHistory(symbol){
+  const modal=document.getElementById('stockHistoryModal');
+  modal.classList.add('on'); modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  document.getElementById('spStockTitle').textContent=symbol;
+  document.getElementById('spStockSummary').innerHTML='<div class="micro">Loading complete local history…</div>';
+
+  const ex=(await all('executions')).slice().sort((a,b)=>String(a.order_execution_time||a.trade_date).localeCompare(String(b.order_execution_time||b.trade_date)));
+  const rows=ex.filter(r=>r.symbol===symbol);
+  if(!rows.length){document.getElementById('spStockSummary').innerHTML='No executions found.';return}
+
+  const allMonthTurn={};
+  ex.forEach(r=>{const d=spD(r);if(!d)return;const v=(+r.quantity||0)*(+r.price||0);allMonthTurn[d.slice(0,7)]=(allMonthTurn[d.slice(0,7)]||0)+v});
+
+  let buy=0,sell=0,bq=0,sq=0,gross=0,cost=0,lots=[],months={};
+  rows.forEach(r=>{
+    const d=spD(r),m=d.slice(0,7),q=+r.quantity||0,p=+r.price||0,v=q*p,side=spSide(r);
+    months[m]??={buy:0,sell:0,gross:0,cost:0,turn:0};
+    months[m].turn+=v;
+    if(side==='buy'){buy+=v;bq+=q;months[m].buy+=v;lots.push([q,p])}
+    else if(side==='sell'){
+      sell+=v;sq+=q;months[m].sell+=v;
+      let left=q,rg=0;
+      while(left>0&&lots.length){let L=lots[0],take=Math.min(left,L[0]);rg+=take*(p-L[1]);L[0]-=take;left-=take;if(L[0]<=1e-9)lots.shift()}
+      gross+=rg;months[m].gross+=rg;
+    }
+  });
+  Object.entries(months).forEach(([m,z])=>{
+    const mc=R2_MONTH[m],den=allMonthTurn[m]||0;
+    z.cost=(mc&&den)?((mc.charges+mc.other)*z.turn/den):0;
+    cost+=z.cost;
+  });
+  const net=gross-cost,turn=buy+sell;
+  const first=spD(rows[0]),last=spD(rows.at(-1));
+  document.getElementById('spStockRange').textContent=`${first} → ${last} · ${rows.length} executions`;
+  document.getElementById('spStockSummary').innerHTML=`
+    <div class="spMetric"><span>Total buy value</span><b>${spMoney(buy)}</b></div>
+    <div class="spMetric"><span>Total sell value</span><b>${spMoney(sell)}</b></div>
+    <div class="spMetric"><span>Gross FIFO realized</span><b class="${gross>=0?'good':'bad'}">${spMoney(gross)}</b></div>
+    <div class="spMetric"><span>Allocated costs*</span><b>${spMoney(cost)}</b></div>
+    <div class="spMetric"><span>Calculated net*</span><b class="${net>=0?'good':'bad'}">${spMoney(net)}</b></div>
+    <div class="spMetric"><span>Turnover</span><b>${spMoney(turn)}</b></div>
+    <div class="spMetric"><span>Buy / sell qty</span><b>${Math.round(bq)} / ${Math.round(sq)}</b></div>
+    <div class="spMetric"><span>Execution net qty</span><b>${Math.round(bq-sq)}</b></div>`;
+
+  document.getElementById('spStockMonths').innerHTML=Object.entries(months).sort().map(([m,z])=>{
+    const n=z.gross-z.cost;
+    return `<tr><td><b>${m}</b></td><td>${spMoney(z.buy)}</td><td>${spMoney(z.sell)}</td><td class="${z.gross>=0?'good':'bad'}">${spMoney(z.gross)}</td><td>${spMoney(z.cost)}</td><td class="${n>=0?'good':'bad'}"><b>${spMoney(n)}</b></td></tr>`;
+  }).join('');
+
+  document.getElementById('spTradeRows').innerHTML=rows.slice().reverse().map(r=>{
+    const q=+r.quantity||0,p=+r.price||0,s=spSide(r);
+    return `<tr><td>${spTime(r)}</td><td class="${s==='buy'?'good':'bad'}"><b>${s.toUpperCase()}</b></td><td>${q}</td><td>${spMoney(p)}</td><td>${spMoney(q*p)}</td><td>${esc(r.order_id||'—')}</td><td>${esc(r.trade_id||'—')}</td></tr>`;
+  }).join('');
+
+  document.getElementById('spTradeCards').innerHTML=rows.slice().reverse().map(r=>{
+    const q=+r.quantity||0,p=+r.price||0,s=spSide(r);
+    return `<div class="spTradeCard mobileOnly"><div class="spTradeTop"><div><b>${spTime(r)}</b></div><div class="spSide ${s}">${s.toUpperCase()}</div></div><div class="spTradeGrid"><div><span>Quantity</span><b>${q}</b></div><div><span>Execution price</span><b>${spMoney(p)}</b></div><div><span>Trade value</span><b>${spMoney(q*p)}</b></div><div><span>Order / trade</span><b>${esc(r.order_id||'—')} / ${esc(r.trade_id||'—')}</b></div></div></div>`;
+  }).join('');
+
+  document.getElementById('spOpenChart').onclick=()=>{closeStockHistory();openIntel(symbol)};
+}
+window.openStockHistory=openStockHistory;
+
+function closeStockHistory(){
+  const m=document.getElementById('stockHistoryModal');m.classList.remove('on');m.setAttribute('aria-hidden','true');document.body.style.overflow='';
+}
+document.getElementById('spStockClose')?.addEventListener('click',closeStockHistory);
+document.getElementById('stockHistoryModal')?.addEventListener('click',e=>{if(e.target.id==='stockHistoryModal')closeStockHistory()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeStockHistory()});
+
+// Make stock names and Analyse buttons open complete trade history.
+// Chart/intelligence remains available from inside the history sheet.
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.r3Action');
+  if(btn){
+    const card=btn.closest('.stockCard');
+    const sym=card?.querySelector('.stockLink')?.textContent?.trim();
+    if(sym){e.preventDefault();e.stopPropagation();openStockHistory(sym)}
+  }
+  const name=e.target.closest('.stockCard .stockLink');
+  if(name){e.preventDefault();e.stopPropagation();openStockHistory(name.textContent.trim())}
+},true);
+</script>
+
 </body></html>
