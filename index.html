@@ -195,7 +195,7 @@ $('saveSettings').onclick=async()=>{await put('settings',{id:'main',baseline:$('
 $('files').onchange=async()=>{let summary=[];for(const f of $('files').files){const id=[f.name,f.size,f.lastModified].join('|');let info={id,name:f.name,size:f.size,type:f.type||'',imported:new Date().toISOString(),kind:'registered'};if(f.name.toLowerCase().endsWith('.csv')){try{const rows=csvRows(await f.text()),cols=rows[0]?Object.keys(rows[0]):[],low=f.name.toLowerCase();if(cols.includes('trade_id')&&cols.includes('symbol')){for(const r of rows)await put('executions',{id:tradeKey(r),...r});info.kind='tradebook-csv';info.rows=rows.length;summary.push(`${f.name}: ${rows.length} executions`)}else if(low.includes('ledger')){for(let i=0;i<rows.length;i++)await put('ledger',{id:`${id}|${i}`,...rows[i]});info.kind='ledger-csv';info.rows=rows.length;summary.push(`${f.name}: ${rows.length} ledger rows parsed`)}else if(low.includes('interest')){for(let i=0;i<rows.length;i++)await put('interest',{id:`${id}|${i}`,...rows[i]});info.kind='interest-csv';info.rows=rows.length;summary.push(`${f.name}: ${rows.length} interest rows parsed`)}else{info.kind='csv-registered';summary.push(`${f.name}: CSV registered`)}}catch(e){summary.push(`${f.name}: parse error`)}}else summary.push(`${f.name}: registered locally; use verified control if needed`);await put('imports',info)}$('importMsg').textContent=summary.join(' · ');await refresh()};
 async function renderImports(){const a=(await all('imports')).sort((x,y)=>String(y.imported).localeCompare(String(x.imported))).slice(0,20);$('importLog').innerHTML=a.length?a.map(x=>`<div class="row"><span>${esc(x.name)}</span><b>${esc(x.kind)}</b></div>`).join(''):'Nothing imported yet.'}
 $('backupBtn').onclick=async()=>{let p={format:'SwingPilotLocalBackup',version:5,created:new Date().toISOString()};for(const s of STORES)p[s]=await all(s);const blob=new Blob([JSON.stringify(p)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SwingPilot_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};$('restore').onchange=async()=>{try{const p=JSON.parse(await $('restore').files[0].text());if(p.format!=='SwingPilotLocalBackup')throw 0;for(const s of STORES)for(const x of(p[s]||[]))await put(s,x);$('restoreMsg').textContent='Backup restored locally.';await refresh()}catch(e){$('restoreMsg').textContent='Invalid SwingPilot backup.'}};
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$(b.dataset.page).classList.add('on');if(b.dataset.page==='dashboard')refresh()});if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=r3-production7').then(r=>r.update()));$('cDate').value=new Date().toISOString().slice(0,10);refresh();renderLoanTracker();
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$(b.dataset.page).classList.add('on');if(b.dataset.page==='dashboard')refresh()});if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=r33-persistence-fix').then(r=>r.update()));$('cDate').value=new Date().toISOString().slice(0,10);refresh();renderLoanTracker();
 </script>
 <script id="production-v5-js">
 const PROD_START='2026-10-05';
@@ -568,6 +568,34 @@ document.addEventListener('click',e=>{
   const name=e.target.closest('.stockCard .stockLink');
   if(name){e.preventDefault();e.stopPropagation();openStockHistory(name.textContent.trim())}
 },true);
+</script>
+
+
+<script id="swingpilot-persistence-fix-r33">
+(function(){
+  let hydrating=false;
+  async function hydrateSwingPilotLocal(){
+    if(hydrating)return; hydrating=true;
+    try{
+      await dbOpen();
+      if(typeof renderLoanTracker==='function') await renderLoanTracker();
+      if(typeof refresh==='function') await refresh();
+      window.__swingPilotHydrated=true;
+      window.__swingPilotHydratedAt=new Date().toISOString();
+    }catch(err){
+      console.error('SwingPilot local restore failed',err);
+      const msg=document.getElementById('dailyJsonMsg');
+      if(msg) msg.textContent='Local data restore failed. Do not re-import or clear app data; reopen the app and retry.';
+    }finally{hydrating=false;}
+  }
+  async function requestPersistentStorage(){
+    try{if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist();}catch(_){}
+  }
+  window.addEventListener('load',async()=>{await requestPersistentStorage();await hydrateSwingPilotLocal();});
+  window.addEventListener('pageshow',()=>hydrateSwingPilotLocal());
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')hydrateSwingPilotLocal();});
+  window.hydrateSwingPilotLocal=hydrateSwingPilotLocal;
+})();
 </script>
 
 </body></html>
